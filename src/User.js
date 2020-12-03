@@ -19,8 +19,8 @@ const columns = [
     {
         title: 'Email',
         width: 100,
-        dataIndex: 'userName',
-        key: 'userName',
+        dataIndex: 'email',
+        key: 'email',
         fixed: 'left',
     },
     {

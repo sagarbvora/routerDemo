@@ -17,6 +17,13 @@ const columns = [
         fixed: 'left',
     },
     {
+        title: 'Country',
+        width: 100,
+        dataIndex: 'country',
+        key: 'country',
+        fixed: 'left',
+    },
+    {
         title: 'Email',
         width: 100,
         dataIndex: 'email',
@@ -35,13 +42,6 @@ const columns = [
         width: 100,
         dataIndex: 'age',
         key: 'age',
-        fixed: 'left',
-    },
-    {
-        title: 'Hobby',
-        width: 100,
-        dataIndex: 'hobby',
-        key: 'hobby',
         fixed: 'left',
     },
     {

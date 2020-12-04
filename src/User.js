@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Row, Col } from 'antd';
 import Table from "antd/lib/table";
+const { Column, ColumnGroup } = Table;
 const columns = [
     {
         title: 'First Name',
@@ -17,24 +18,10 @@ const columns = [
         fixed: 'left',
     },
     {
-        title: 'Country',
-        width: 100,
-        dataIndex: 'country',
-        key: 'country',
-        fixed: 'left',
-    },
-    {
         title: 'Email',
         width: 100,
         dataIndex: 'email',
         key: 'email',
-        fixed: 'left',
-    },
-    {
-        title: 'Password',
-        width: 100,
-        dataIndex: 'password',
-        key: 'password',
         fixed: 'left',
     },
     {
@@ -49,6 +36,13 @@ const columns = [
         width: 100,
         dataIndex: 'gender',
         key: 'gender',
+        fixed: 'left',
+    },
+    {
+        title: 'Country',
+        width: 100,
+        dataIndex: 'country',
+        key: 'country',
         fixed: 'left',
     },
     {
@@ -67,30 +61,26 @@ const columns = [
         )
     },
 
-]
-const data = [
-    {
-        key: '1',
-        firstName: 'John Brown',
-        age: 32,
-        address: 'New York Park',
-    },
-    {
-        key: '2',
-        firstName: 'Jim Green',
-        age: 40,
-        address: 'London Park',
-    },
 ];
-
-const onEdit = () =>{
+const onEdit = (record) =>{
     console.log("Edit");
 }
-const onDelete = () =>{
-    console.log("delete");
+const onDelete = (record) =>{
+    console.log("Delete");
 }
 
-const User = () =>{
+const User = (props) =>{
+    const [isEditable, setEditableIndex] = useState(null);
+    const [list, setList] = useState([]);
+
+
+    useEffect(() =>{
+        let data = [];
+        if (JSON.parse(localStorage.getItem("list")) !== null){
+            data = JSON.parse(localStorage.getItem("list"));
+        }
+       setList(data);
+    },[]);
 
     return(
         <>
@@ -100,11 +90,12 @@ const User = () =>{
                 <Col span={12} className="mt-3">
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        dataSource={list}
                         pagination={{pageSize: 10}}
                         rowKey={'key'}
                         // loading={isLoading}
-                    />
+                    >
+                    </Table>
                 </Col>
             </Row>
         </>

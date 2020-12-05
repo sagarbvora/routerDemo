@@ -1,38 +1,53 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Form, Input, Button, Checkbox, Row, Col, Card, Icon } from 'antd';
 import { UserOutlined,LockOutlined } from '@ant-design/icons';
-
 const Login = (props) =>{
+
+    const [loginData,setLoginData] = useState({});
+    const [list, setList] = useState([]);
+
+    useEffect(() => {
+        let data = [];
+        if (JSON.parse(localStorage.getItem("list")) !== null) {
+            data = JSON.parse(localStorage.getItem("list"));
+        }
+        setList(data);
+
+    }, []);
+
+    const handleChange = (event) =>{
+       const {name, value} = event.target;
+        setLoginData({...loginData,[name]: value});
+    }
+
+    const onLogin = () =>{
+        const findLofinUser = list.find(user => user.email === loginData.email && user.password === loginData.password);
+        if(findLofinUser && findLofinUser.email && findLofinUser.password){
+            alert("Successfully login")
+        }else{
+            alert("Please enter valid data..");
+        }
+    }
+
    const formRegister = () =>{
        props.history.push("/signUp");
    }
     return(
         <>
             <Row style={{marginTop: 250}}>
-                <Col span={8}></Col>
+                <Col span={8}/>
                 <Col span={4}>
                     <Card bordered={false} className="login_card">
                         <h2>Login</h2>
-                        <Form
-                            name="basic"
-                            initialValues={{remember: true}}
-                        >
-                            <Form.Item
-                                rules={[{required: true, message: 'Please input your username!'}]}
-                            >
-                                <Input name="userName" placeholder="Please Input Your Username!" addonBefore={<UserOutlined />}/>
+                        <Form>
+                            <Form.Item>
+                                <Input name="email" placeholder="Please Input Your Username!" autoSave="false"  value={loginData.email || ""} onChange={handleChange} addonBefore={<UserOutlined />}/>
                             </Form.Item>
 
-                            <Form.Item
-                                rules={[{required: true, message: 'Please input your password!'}]}
-                            >
-                                <Input.Password name="userName" placeholder="Please Input Your Password!" addonBefore={<LockOutlined />}/>
+                            <Form.Item name="passWord">
+                                <Input.Password name="password" placeholder="Please Input Your Password!" autoSave="false" value={loginData.password || ""}  onChange={handleChange} addonBefore={<LockOutlined />}/>
                             </Form.Item>
-                            <Form.Item>
-                                <Button type="primary" htmlType="submit">
-                                    Login
-                                </Button>
-                            </Form.Item>
+                            <Button type="primary" onClick={onLogin} >Login</Button>
                         </Form>
                     </Card>
                 </Col>

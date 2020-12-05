@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Form, Input, Button, Checkbox, Row, Col, Card, Icon, Radio, Select} from 'antd';
 import {UserOutlined, LockOutlined, MailOutlined} from '@ant-design/icons';
+import {useHistory} from 'react-router-dom';
 
 const {TextArea} = Input;
 const {Option} = Select;
@@ -17,7 +18,7 @@ const SignUp = (props) => {
     const [list, setList] = useState([]);
     const [isEditable, setEditableIndex] = useState(null);
     const [errors, setValidation] = React.useState({});
-    // const [id] = useState(_uniqueId(''));
+    const history = useHistory();
 
     useEffect(() => {
         let data = [];
@@ -36,7 +37,7 @@ const SignUp = (props) => {
 
     const handleChange = event => {
         const {name, value} = event.target;
-            setUserDetails({...userDetails, [name]: value});
+        setUserDetails({...userDetails, [name]: value});
     }
     const validate = (name, value) => {
         const emailRegx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/ig;
@@ -64,11 +65,8 @@ const SignUp = (props) => {
                 if (!value) return "Country is required";
                 return null;
             case 'password':
-                if (!value) return "Password is required";
+                if (!value >= 6) return "Password is required";
                 return null;
-            // case 'conformPassword':
-            //     if (!value) return "Conform Password is required";
-            //     return null;
             default:
                 return null;
         }
@@ -96,24 +94,23 @@ const SignUp = (props) => {
         if (Object.keys(errorsObj).length > 0) {
             return setValidation(errorsObj);
         } else {
-            console.log(props.match.params.id );
+            console.log(props.match.params.id);
             if (props.match.params.id !== undefined) {
                 let index = list.findIndex(item => item.id == props.match.params.id);
                 list[index] = userDetails;
+                history.push("/user");
 
-            }else {
+            } else {
                 userDetails.id = list.length + 1;
                 list.push(userDetails);
+                history.push("/login");
             }
             localStorage.setItem("list", JSON.stringify(list));
             setList(list);
-            props.history.push("/user");
             setValidation({});
             setEditableIndex(props.match.params.id);
+        }
     }
-    }
-
-
     return (
         <>
             <Row>
@@ -154,8 +151,13 @@ const SignUp = (props) => {
 
                             </Form.Item>
                             <Form.Item>
-                                <Radio.Group name="gender"  onChange={e => handleChange({target: {name: "gender", value: e.target.value}})}
-                                value = {userDetails.gender || ""}>
+                                <Radio.Group name="gender" onChange={e => handleChange({
+                                    target: {
+                                        name: "gender",
+                                        value: e.target.value
+                                    }
+                                })}
+                                             value={userDetails.gender || ""}>
                                     <Radio value="Male">Male</Radio>
                                     <Radio value="Female">Female</Radio>
                                     <Radio value="Other">Other</Radio>
@@ -185,17 +187,6 @@ const SignUp = (props) => {
                                                 value={userDetails.password || ""} onChange={handleChange}/>
                                 <span className="text-danger">{errors.password || ""}</span>
                             </Form.Item>
-
-                            {/*<Form.Item*/}
-                            {/*    name="password"*/}
-                            {/*    dependencies={['password']}*/}
-                            {/*>*/}
-                            {/*    <Input.Password name="conformPassword" addonBefore={<LockOutlined/>}*/}
-                            {/*                    value={userDetails.conformPassword} onChange={handleChange}/>*/}
-                            {/*    <span className="text-danger">{errors.conformPassword || ""}</span>*/}
-
-                            {/*</Form.Item>*/}
-
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" onClick={handleSubmit}>
                                     Sign Up

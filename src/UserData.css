@@ -12,3 +12,10 @@
 .card_formate{
     background-color: #ebedef !important;
 }
+.menu_list{
+    width: 256px;
+    height: 100%;
+}
+.btn-addnew{
+    margin-left: 870px;
+}

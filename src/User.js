@@ -1,16 +1,14 @@
 import React, {useEffect, useState} from 'react';
-// import Button from "@material-ui/core/Button";
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { Popconfirm,Button, message, Row, Col } from 'antd';
-import { QuestionCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {Popconfirm, Button, message, Row, Col} from 'antd';
+import {QuestionCircleOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import Table from "antd/lib/table";
+import {useHistory} from 'react-router-dom';
 
 const {Column, ColumnGroup} = Table;
 
 const User = (props) => {
     const [list, setList] = useState([]);
-    // const [showForm, setShowForm] = useState(true);
+    const history = useHistory();
 
     useEffect(() => {
         let data = [];
@@ -22,16 +20,24 @@ const User = (props) => {
     }, []);
 
     const onEdit = (record) => {
-        props.history.push(`/edit/${record.id}`);
+        history.push(`/edit/${record.id}`);
     }
 
     const onDelete = (id) => {
-       if (message.success("Your record is delete!!")){
-           const filterData = list.filter(user => user.id !== id);
-           localStorage.setItem("list", JSON.stringify(filterData));
-           setList(filterData);
-       }
+        if (message.success("Your record is delete!!")) {
+            const filterData = list.filter(user => user.id !== id);
+            localStorage.setItem("list", JSON.stringify(filterData));
+            setList(filterData);
+        }
 
+    }
+
+    const onLogOut = () => {
+        history.push("/login");
+        localStorage.setItem("token","");
+    }
+    const onNewData = () => {
+        history.push("/signup");
     }
 
     const columns = [
@@ -88,12 +94,14 @@ const User = (props) => {
             render: (text, record) => {
                 return (
                     <div>
-                        <Button primary  onClick={() => {
+                        <Button primary onClick={() => {
                             onEdit(record)
-                        }}><EditOutlined /></Button>
+                        }}><EditOutlined/></Button>
                         &nbsp;&nbsp;
-                        <Popconfirm placement="bottom" title="Are you sure to delete this record?" onConfirm={() =>{onDelete(text)}} okText="Yes" cancelText="No">
-                                <Button danger><DeleteOutlined /></Button>
+                        <Popconfirm placement="bottom" title="Are you sure to delete this record?" onConfirm={() => {
+                            onDelete(text)
+                        }} okText="Yes" cancelText="No">
+                            <Button danger><DeleteOutlined/></Button>
                         </Popconfirm>
                     </div>
                 )
@@ -108,7 +116,15 @@ const User = (props) => {
             <Row>
                 <Col span={6}/>
                 <Col span={12} className="mt-3">
-                    <h1>Users</h1>
+                    <div className="header-data">
+                        <h1>Users</h1>
+                        <Button type="primary" htmlType="submit" onClick={onNewData}>
+                            Add New
+                        </Button>&nbsp;&nbsp;
+                        <Button type="primary" htmlType="submit" onClick={onLogOut}>
+                            Log Out
+                        </Button>
+                    </div>
                     <Table
                         columns={columns}
                         dataSource={list}

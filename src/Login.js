@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import { Form, Input, Button, Checkbox, Row, Col, Card, Icon } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, Card, Icon, message } from 'antd';
 import { UserOutlined,LockOutlined } from '@ant-design/icons';
+import {useHistory} from 'react-router-dom';
 const Login = (props) =>{
 
     const [loginData,setLoginData] = useState({});
     const [list, setList] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
         let data = [];
@@ -21,17 +23,20 @@ const Login = (props) =>{
     }
 
     const onLogin = () =>{
-        const findLofinUser = list.find(user => user.email === loginData.email && user.password === loginData.password);
-        if(findLofinUser && findLofinUser.email && findLofinUser.password){
-            alert("Successfully login");
-            props.history.push("/dashBord");
+        const findLoginUser = list.find(user => user.email === loginData.email && user.password === loginData.password);
+
+        if(findLoginUser){
+            if(message.success("Login Successfully")){
+                history.push("/userDashBord");
+                localStorage.setItem("token",findLoginUser.email);
+            }
         }else{
-            alert("Please enter valid data..");
+            message.error("Please Enter Valid Data..");
         }
     }
 
-   const formRegister = () =>{
-       props.history.push("/signUp");
+   const onRegister = () =>{
+      history.push("/signup");
    }
     return(
         <>
@@ -57,7 +62,7 @@ const Login = (props) =>{
                         <h2 className="heading2">Sign Up</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
                             labore et dolore magna aliqua.</p><br />
-                        <Button type="primary" onClick={formRegister} >
+                        <Button type="primary" onClick={onRegister} >
                             Register Now!
                         </Button>
                     </Card>

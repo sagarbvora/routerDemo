@@ -23,7 +23,8 @@ const Login = (props) =>{
     const onLogin = () =>{
         const findLofinUser = list.find(user => user.email === loginData.email && user.password === loginData.password);
         if(findLofinUser && findLofinUser.email && findLofinUser.password){
-            alert("Successfully login")
+            alert("Successfully login");
+            props.history.push("/dashBord");
         }else{
             alert("Please enter valid data..");
         }

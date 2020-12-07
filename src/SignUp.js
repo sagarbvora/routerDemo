@@ -16,7 +16,7 @@ const numOfCountries = [
 const SignUp = (props) => {
     const [userDetails, setUserDetails] = useState({});
     const [list, setList] = useState([]);
-    const [isEditable, setEditableIndex] = useState(null);
+    // const [isEditable, setEditableIndex] = useState(null);
     const [errors, setValidation] = React.useState({});
     const history = useHistory();
 
@@ -108,7 +108,6 @@ const SignUp = (props) => {
             localStorage.setItem("list", JSON.stringify(list));
             setList(list);
             setValidation({});
-            setEditableIndex(props.match.params.id);
         }
     }
     return (

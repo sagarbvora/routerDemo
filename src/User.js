@@ -1,14 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Popconfirm, Button, message, Row, Col} from 'antd';
-import {QuestionCircleOutlined, DeleteOutlined, EditOutlined} from '@ant-design/icons';
+import {Popconfirm, Button, message, Row, Col, Input} from 'antd';
+import { DeleteOutlined, EditOutlined, SearchOutlined} from '@ant-design/icons';
 import Table from "antd/lib/table";
 import {useHistory} from 'react-router-dom';
 
 const {Column, ColumnGroup} = Table;
+const { Search } = Input;
 
 const User = (props) => {
+    const [searchDetails, setSearchDetails] = useState({
+        firstName:"",
+        lastName:"",
+        email:"",
+        age:"",
+        gender:""
+    });
     const [list, setList] = useState([]);
     const history = useHistory();
+    const [searchDuplicate, setSearchDuplicate] = useState([]);
 
     useEffect(() => {
         let data = [];
@@ -16,6 +25,7 @@ const User = (props) => {
             data = JSON.parse(localStorage.getItem("list"));
         }
         setList(data);
+        setSearchDuplicate(data);
 
     }, []);
 
@@ -38,6 +48,31 @@ const User = (props) => {
     }
     const onNewData = () => {
         history.push("/signup");
+    }
+
+    const onChange = e =>{
+        const {name,value} = e.target;
+        setSearchDetails({...searchDetails,[name]: value});
+    }
+    const onSearch = () => {
+        let searchValue = searchDetails;
+        let row = searchDuplicate || [];
+        if (searchValue.firstName) {
+            row = row.filter(value => value.firstName.toLowerCase().includes(searchValue.firstName.toLowerCase()));
+        }
+        if (searchValue.lastName) {
+            row = row.filter(value => value.lastName.toLowerCase().includes(searchValue.lastName.toLowerCase()));
+        }
+        if (searchValue.email) {
+            row = row.filter(value => value.email.toLowerCase().includes(searchValue.email.toLowerCase()));
+        }
+        if (searchValue.age) {
+            row = row.filter(value => value.age.toString().toLowerCase().includes(searchValue.age.toLowerCase()));
+        }
+        if (searchValue.gender) {
+            row = row.filter(value => value.gender.toLowerCase() === searchValue.gender.toLowerCase());
+        }
+        setList(row);
     }
 
     const columns = [
@@ -116,6 +151,7 @@ const User = (props) => {
             <Row>
                 <Col span={6}/>
                 <Col span={12} className="mt-3">
+
                     <div className="header-data">
                         <h1>Users</h1>
                         <Button type="primary" htmlType="submit" onClick={onNewData}>
@@ -124,7 +160,34 @@ const User = (props) => {
                         <Button type="primary" htmlType="submit" onClick={onLogOut}>
                             Log Out
                         </Button>
-                    </div>
+                    </div><br/><br/>
+                    <Row>
+                        <Col span={4}>
+                            <label>FirstName</label>
+                            <Search placeholder="input search text" name="firstName" value={searchDetails.firstName} onChange={onChange} />
+                        </Col>&nbsp;&nbsp;
+                        <Col span={4}>
+                            <label>LastName</label>
+                            <Search placeholder="input search text" name="lastName" value={searchDetails.lastName} onChange={onChange} />
+                        </Col>&nbsp;&nbsp;
+                        <Col span={4}>
+                            <label>Email</label>
+                            <Search placeholder="input search text" name="email" value={searchDetails.email} onChange={onChange} />
+                        </Col>&nbsp;&nbsp;
+                        <Col span={4}>
+                            <label>Age</label>
+                            <Search placeholder="input search text" name="age" value={searchDetails.age} onChange={onChange} />
+                        </Col>&nbsp;&nbsp;
+                        <Col span={4}>
+                            <label>Gender</label>
+                            <Search placeholder="input search text" name="gender" value={searchDetails.gender} onChange={onChange} />
+                        </Col>&nbsp;&nbsp;
+                        <Col span={2}>
+                            <Button type="primary" icon={<SearchOutlined />} className="btn-search" onClick={onSearch}>
+                                Search
+                            </Button>
+                        </Col>
+                    </Row>
                     <Table
                         columns={columns}
                         dataSource={list}

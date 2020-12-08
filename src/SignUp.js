@@ -188,8 +188,8 @@ const SignUp = (props) => {
                             </Form.Item>
                             <Form.Item>
                                 <Button type="primary" htmlType="submit" onClick={handleSubmit}>
-                                    Sign Up
-                                </Button>
+                                Sign Up
+                            </Button>
                             </Form.Item>
                         </Form>
                     </Card>

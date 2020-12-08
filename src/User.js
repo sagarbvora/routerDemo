@@ -189,12 +189,12 @@ const User = (props) => {
                         </Col>
                     </Row>
                     <Table
-                        columns={columns}
-                        dataSource={list}
-                        pagination={{pageSize: 10}}
-                        rowKey={'key'}
-                    >
-                    </Table>
+                    columns={columns}
+                    dataSource={list}
+                    pagination={{pageSize: 10}}
+                    rowKey={'key'}
+                >
+                </Table>
                 </Col>
             </Row>
         </>

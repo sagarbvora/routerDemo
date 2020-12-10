@@ -15,17 +15,16 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/*<Switch>*/}
-        {/*  <Route exact path="/" component={Login}/>*/}
-        {/*  <Route path="/login" component={Login}/>*/}
-        {/*  <Route path="/signup" component={SignUp}/>*/}
-        {/*  <PrivateRoute path="/user" component={User}/>*/}
-        {/*  <PrivateRoute path="/edit/:id" component={SignUp}/>*/}
-        {/*  <PrivateRoute path="/userDashBord" component={UserDashBord}/>*/}
-        {/*</Switch>*/}
-
+        <Switch>
+          <Route exact path="/" component={Login}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/signup" component={SignUp}/>
+          <PrivateRoute path="/user" component={User}/>
+          <PrivateRoute path="/edit/:id" component={SignUp}/>
+          <PrivateRoute path="/userDashBord" component={UserDashBord}/>
+            <Route path="/apiDemo" component={Api_Demo}/>
+      </Switch>
       </BrowserRouter>
-      <Api_Demo/>
     </div>
   );
 }

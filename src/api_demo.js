@@ -26,11 +26,11 @@ const Register = (props) => {
     }
 
     const onsubmit = () => {
-        debugger
         if (editId !== null) {
             axios.put(`http://localhost:8080/notes/${editId}`, userDetail)
                 .then(response => {
                     console.log(response);
+                    initial();
                 })
                 .catch(err => {
                     console.log(err)
